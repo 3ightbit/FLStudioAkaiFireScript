@@ -1,4 +1,4 @@
-# Modified **Akai Fire** script based on the one posted [here](https://forum.image-line.com/viewtopic.php?f=1994&t=228782&start=200)
+# Modified **Akai Fire** script based on the one posted [here](https://forum.image-line.com/viewtopic.php?f=1994&t=228782)
 
 This is just for fun project - use at your own risk!!!
 
