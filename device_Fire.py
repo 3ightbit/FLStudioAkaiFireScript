@@ -1649,8 +1649,8 @@ class TFire():
                                 event.handled = True
                             else:
                                 if (event.pmeFlags & PME_System_Safe != 0):
-                                    x2 = x % 8
-                                    y2 = y + self.GetTrackOfs() + 1 + 4 * (x >= 8)
+                                    x2 = x % 4
+                                    y2 = y + self.GetTrackOfs() + 1 + 4 * int(x / 4)
                                     if self.GetClipOfs() >= 0:
                                         if event.data2 > 0:
                                             # clip launch
@@ -2288,8 +2288,8 @@ class TFire():
             ofs = self.GetTrackOfs()
             i = 0
             self.PlayingPads.clear()
-            for y in range(max(FirstTrackNum - ofs, 1), min(LastTrackNum - ofs, 8) + 1):
-                for x in range(0, 8):  # clips
+            for y in range(max(FirstTrackNum - ofs, 1), min(LastTrackNum - ofs, 16) + 1):
+                for x in range(0, 4):  # clips
                     m = self.GetClipOfs() + x
                     o = playlist.getLiveBlockStatus(y + ofs, m)
                     if (o & 1) == 0:
@@ -2309,9 +2309,9 @@ class TFire():
                         c, hh, ss, vv = self.ScaleColor(l, hh, ss, vv)
 
                         if ((o & 4) != 0): # playing
-                          self.PlayingPads.append([x + 8 * (y > 4), y%5 - 1 + (y > 4), c])
+                          self.PlayingPads.append([x + 4 * int((y - 1) / 4), (y - 1)%4, c])
 
-                    self.AddPadDataCol(dataOut, x + 8 * (y > 4), y%5 - 1 + (y > 4), c)
+                    self.AddPadDataCol(dataOut, x + 4 * int((y - 1) / 4), (y - 1)%4, c)
 
                 # mute (track stop) buttons
                 o = playlist.getLiveStatus(y + ofs, LB_Status_Simple)
