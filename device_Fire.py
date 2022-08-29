@@ -1624,8 +1624,12 @@ class TFire():
                             # clip release safety
                             if event.data2 == 0:
                                 if self.BtnLastClip[event.data1].TrackNum != MaxInt:
-                                    if (event.pmeFlags & PME_System_Safe != 0):
-                                        playlist.triggerLiveClip(self.BtnLastClip[event.data1].TrackNum, self.BtnLastClip[event.data1].SubNum, self.BtnLastClip[event.data1].Flags | TLC_Release)
+                                    # stopping this triggerLiveClip until I figure out how the whole script works
+                                    # for now it triggers the clips second time and removing it fixes it:
+                                    # 
+                                    #if (event.pmeFlags & PME_System_Safe != 0):
+                                    #    playlist.triggerLiveClip(self.BtnLastClip[event.data1].TrackNum, self.BtnLastClip[event.data1].SubNum, self.BtnLastClip[event.data1].Flags | TLC_Release)
+
                                     self.BtnLastClip[event.data1].TrackNum = MaxInt
                                     event.handled = True
                                     return
