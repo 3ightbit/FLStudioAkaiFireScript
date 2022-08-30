@@ -1973,13 +1973,12 @@ class TFire():
                             if self.CurrentMode == ModePerf:
                                 self.SplitRangeSelected = self.SplitRangeSelected + 1
                                 self.SplitRangeSelected = self.SplitRangeSelected % len(self.SplitRangeVariants)
-
-                                self.SplitRange = self.SplitRangeVariants[self.SplitRangeSelected]
-
+                                
                                 self.OnUpdateLiveMode(1, playlist.trackCount())
-
-                            self.CurrentMode = ModePerf
-                            self.ShowCurrentPadMode()
+                                self.DisplayTimedText('Grid size: ' + str(self.SplitRangeVariants[self.SplitRangeSelected]))
+                            else:
+                                self.CurrentMode = ModePerf
+                                self.ShowCurrentPadMode()
 
                         elif self.CurrentMode == ModePerf:
                             self.OverviewMode = not self.OverviewMode

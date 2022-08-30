@@ -22,8 +22,23 @@ This is just for fun project - use at your own risk!!!
 [4][4][4][4] [8][8][8][8] [12][12][12][12] [16][16][16][16]
 ```
 
-### Todo:
+### Todo/Ideas/Issues:
 
-- Add mute/solo/alt/shift + pad for stopping coresponding clip in split mode
-- Figure out a way to delete the clips in a corresponding pad
-- Figure out a way to record instrument/channel into a corresponding pad
+
+- Make script work with split sizes that are not power of 2
+- Fix or remove the Alt + Pad column trigger
+- Alt + Pad - ?Make Pad active/selected
+- Alt + Mute - ?Mute all tracks on that row
+- Scroll with the 'Select' knob more according to the split mode
+- Add use to the 'Select' knob button
+- Shift + Pad - ?
+- Shift + Mute - ?
+- Alt + Shift + Pad - ?
+- Alt + Shift + Mute - ?
+- Figure out what to do with overview mode
+- Key + Mute/Solo - Mute track
+- Key + Mute/Solo - Mute all tracks in split mode
+- Key + Pad - Select clip
+- Key + Pad - Stop clip
+- Key + Pad - Remove clip
+- Key + Pad - Put active sample/pattern into the clip's place
