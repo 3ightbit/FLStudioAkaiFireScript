@@ -21,11 +21,12 @@ This is just for fun project - use at your own risk!!!
 [3][3][3][3] [7][7][7][7] [11][11][11][11] [15][15][15][15]
 [4][4][4][4] [8][8][8][8] [12][12][12][12] [16][16][16][16]
 ```
+- Text on the display indicates the current grid size when changing sizes
+- It can work with any grid size, but keeping 16, 8 and 4 for now
 
 ### Todo/Ideas/Issues:
 
 
-- Make script work with split sizes that are not power of 2
 - Fix or remove the Alt + Pad column trigger
 - Alt + Pad - ?Make Pad active/selected
 - Alt + Mute - ?Mute all tracks on that row

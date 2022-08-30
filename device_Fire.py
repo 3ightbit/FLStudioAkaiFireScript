@@ -1968,8 +1968,6 @@ class TFire():
                     if (event.midiId == MIDI_NOTEON):
                         self.LayoutSelectionMode = False
                         if not self.ShiftHeld:
-                            
-                            
                             if self.CurrentMode == ModePerf:
                                 self.SplitRangeSelected = self.SplitRangeSelected + 1
                                 self.SplitRangeSelected = self.SplitRangeSelected % len(self.SplitRangeVariants)
@@ -2301,30 +2299,36 @@ class TFire():
             ofs = self.GetTrackOfs()
             i = 0
             self.PlayingPads.clear()
-            for y in range(max(FirstTrackNum - ofs, 1), min(LastTrackNum - ofs, PadsH * int(PadsW / self.SplitRangeVariants[self.SplitRangeSelected])) + 1):
+
+            padTracksSplitTimes = int(PadsW / self.SplitRangeVariants[self.SplitRangeSelected])
+            padTracksSplitRemainder = (PadsW % self.SplitRangeVariants[self.SplitRangeSelected]) > 0
+            padTracks = padTracksSplitTimes + padTracksSplitRemainder
+
+            for y in range(max(FirstTrackNum - ofs, 1), min(LastTrackNum - ofs, PadsH * padTracks) + 1):
                 for x in range(0, int (self.SplitRangeVariants[self.SplitRangeSelected])):  # clips
-                    m = self.GetClipOfs() + x
-                    o = playlist.getLiveBlockStatus(y + ofs, m)
-                    if (o & 1) == 0:
-                        c = 0
-                    else:
-                        c = playlist.getLiveBlockColor(y + ofs, m)
-                        hh, ss, vv = utils.RGBToHSVColor(c)
-                        vv = 1
-                        l = 1
-                        if ((o & 2) != 0): # scheduled
-                            l = 0.25
-
-                        if ((o & 4) != 0): # playing
-                            l = 1
+                    if x + self.SplitRangeVariants[self.SplitRangeSelected] * int((y - 1) / PadsH) < PadsW:
+                        m = self.GetClipOfs() + x
+                        o = playlist.getLiveBlockStatus(y + ofs, m)
+                        if (o & 1) == 0:
+                            c = 0
+                        else:
+                            c = playlist.getLiveBlockColor(y + ofs, m)
+                            hh, ss, vv = utils.RGBToHSVColor(c)
                             vv = 1
-                            ss = 0
-                        c, hh, ss, vv = self.ScaleColor(l, hh, ss, vv)
+                            l = 1
+                            if ((o & 2) != 0): # scheduled
+                                l = 0.25
 
-                        if ((o & 4) != 0): # playing
-                          self.PlayingPads.append([x + self.SplitRangeVariants[self.SplitRangeSelected] * int((y - 1) / PadsH), (y - 1) % (PadsH), c])
+                            if ((o & 4) != 0): # playing
+                                l = 1
+                                vv = 1
+                                ss = 0
+                            c, hh, ss, vv = self.ScaleColor(l, hh, ss, vv)
 
-                    self.AddPadDataCol(dataOut, x + self.SplitRangeVariants[self.SplitRangeSelected] * int((y - 1) / PadsH), (y - 1) % (PadsH), c)
+                            if ((o & 4) != 0): # playing
+                              self.PlayingPads.append([x + self.SplitRangeVariants[self.SplitRangeSelected] * int((y - 1) / PadsH), (y - 1) % (PadsH), c])
+                    
+                        self.AddPadDataCol(dataOut, x + self.SplitRangeVariants[self.SplitRangeSelected] * int((y - 1) / PadsH), (y - 1) % (PadsH), c)
 
                 # mute (track stop) buttons
                 o = playlist.getLiveStatus(y + ofs, LB_Status_Simple)
