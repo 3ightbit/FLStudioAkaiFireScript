@@ -351,6 +351,9 @@ class TFire():
         self.FLFireDeviceCount = 0
         self.IdleDeviceCount = 0
         self.AnalyzerHue = 0.0
+        
+        self.SplitRangeVariants = [16, 8, 4]
+        self.SplitRangeSelected = 0
 
     def LoadKeyColors(self):
         for n in range(0, 2):
@@ -1649,8 +1652,8 @@ class TFire():
                                 event.handled = True
                             else:
                                 if (event.pmeFlags & PME_System_Safe != 0):
-                                    x2 = x % 4
-                                    y2 = y + self.GetTrackOfs() + 1 + 4 * int(x / 4)
+                                    x2 = x % self.SplitRangeVariants[self.SplitRangeSelected]
+                                    y2 = y + self.GetTrackOfs() + 1 + 4 * int(x / self.SplitRangeVariants[self.SplitRangeSelected])
                                     if self.GetClipOfs() >= 0:
                                         if event.data2 > 0:
                                             # clip launch
@@ -1965,8 +1968,19 @@ class TFire():
                     if (event.midiId == MIDI_NOTEON):
                         self.LayoutSelectionMode = False
                         if not self.ShiftHeld:
+                            
+                            
+                            if self.CurrentMode == ModePerf:
+                                self.SplitRangeSelected = self.SplitRangeSelected + 1
+                                self.SplitRangeSelected = self.SplitRangeSelected % len(self.SplitRangeVariants)
+
+                                self.SplitRange = self.SplitRangeVariants[self.SplitRangeSelected]
+
+                                self.OnUpdateLiveMode(1, playlist.trackCount())
+
                             self.CurrentMode = ModePerf
                             self.ShowCurrentPadMode()
+
                         elif self.CurrentMode == ModePerf:
                             self.OverviewMode = not self.OverviewMode
                             if self.OverviewMode:
@@ -2288,8 +2302,8 @@ class TFire():
             ofs = self.GetTrackOfs()
             i = 0
             self.PlayingPads.clear()
-            for y in range(max(FirstTrackNum - ofs, 1), min(LastTrackNum - ofs, 16) + 1):
-                for x in range(0, 4):  # clips
+            for y in range(max(FirstTrackNum - ofs, 1), min(LastTrackNum - ofs, PadsH * int(PadsW / self.SplitRangeVariants[self.SplitRangeSelected])) + 1):
+                for x in range(0, int (self.SplitRangeVariants[self.SplitRangeSelected])):  # clips
                     m = self.GetClipOfs() + x
                     o = playlist.getLiveBlockStatus(y + ofs, m)
                     if (o & 1) == 0:
@@ -2309,9 +2323,9 @@ class TFire():
                         c, hh, ss, vv = self.ScaleColor(l, hh, ss, vv)
 
                         if ((o & 4) != 0): # playing
-                          self.PlayingPads.append([x + 4 * int((y - 1) / 4), (y - 1)%4, c])
+                          self.PlayingPads.append([x + self.SplitRangeVariants[self.SplitRangeSelected] * int((y - 1) / PadsH), (y - 1) % (PadsH), c])
 
-                    self.AddPadDataCol(dataOut, x + 4 * int((y - 1) / 4), (y - 1)%4, c)
+                    self.AddPadDataCol(dataOut, x + self.SplitRangeVariants[self.SplitRangeSelected] * int((y - 1) / PadsH), (y - 1) % (PadsH), c)
 
                 # mute (track stop) buttons
                 o = playlist.getLiveStatus(y + ofs, LB_Status_Simple)
