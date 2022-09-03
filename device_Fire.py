@@ -352,8 +352,8 @@ class TFire():
         self.IdleDeviceCount = 0
         self.AnalyzerHue = 0.0
         
-        self.SplitRangeVariants = [16, 8, 4]
-        self.SplitRangeSelected = 0
+        self.SplitRangeVariants = list(range(1,17))
+        self.SplitRangeSelected = 15
 
     def LoadKeyColors(self):
         for n in range(0, 2):
@@ -1394,6 +1394,20 @@ class TFire():
                             self.RefreshDrumMode()
                             self.DisplayTimedText(DrumModesNamesT[self.CurrentDrumMode])
 
+                        elif (self.CurrentMode == ModePerf) & self.LayoutSelectionMode:
+                            if event.data2 == 1:
+                                self.SplitRangeSelected += 1
+                                self.SplitRangeSelected = self.SplitRangeSelected % len(self.SplitRangeVariants)
+                                
+                                self.OnUpdateLiveMode(1, playlist.trackCount())
+                                self.DisplayTimedText('Grid size: ' + str(self.SplitRangeVariants[self.SplitRangeSelected]))
+                            else:
+                                self.SplitRangeSelected -= 1
+                                self.SplitRangeSelected = self.SplitRangeSelected % len(self.SplitRangeVariants)
+                                
+                                self.OnUpdateLiveMode(1, playlist.trackCount())
+                                self.DisplayTimedText('Grid size: ' + str(self.SplitRangeVariants[self.SplitRangeSelected]))
+
                         elif self.BrowserMode:
                             text = ui.navigateBrowserMenu(event.data2, self.ShiftHeld)
                             if text != '':
@@ -1737,11 +1751,13 @@ class TFire():
                             else:
                                 ui.selectBrowserMenuItem()
 
-                        elif ((self.CurrentMode == ModeNotes) | (self.CurrentMode == ModeDrum)) & self.JogWheelPushed & (channels.channelNumber(True) >= 0):
+                        elif ((self.CurrentMode == ModeNotes) | (self.CurrentMode == ModeDrum) | (self.CurrentMode == ModePerf)) & self.JogWheelPushed & (channels.channelNumber(True) >= 0):
                             self.LayoutSelectionMode = not self.LayoutSelectionMode
                             if self.LayoutSelectionMode:
                                 if self.CurrentMode == ModeNotes:
                                     self.DisplayTimedText(self.GetNoteModeName())
+                                elif self.CurrentMode == ModePerf:
+                                    self.DisplayTimedText('Grid size: ' + str(self.SplitRangeVariants[self.SplitRangeSelected]))
                                 else:
                                     self.DisplayTimedText(DrumModesNamesT[self.CurrentDrumMode])
 
