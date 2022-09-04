@@ -549,6 +549,16 @@ class TFire():
         elif Mode == ModePerf:
             ofsX = self.GetClipOfs()
             ofsY = self.GetTrackOfs() + 1
+
+            splitRange = self.SplitRangeVariants[self.SplitRangeSelected]
+
+            padTracksSplitTimes = int(PadsW / splitRange)
+            padTracksSplitRemainder = (PadsW % splitRange) > 0
+            padTracks = padTracksSplitTimes + padTracksSplitRemainder
+
+            Result = utils.TRect(ofsX, ofsY, ofsX + splitRange, ofsY + padTracks * PadsH)
+            
+            return Result
         else:
             ofsX = 0
             ofsY = 0
@@ -1407,6 +1417,9 @@ class TFire():
                                 
                                 self.OnUpdateLiveMode(1, playlist.trackCount())
                                 self.DisplayTimedText('Grid size: ' + str(self.SplitRangeVariants[self.SplitRangeSelected]))
+
+                            R = self.GetGridRect(ModePerf)
+                            playlist.liveDisplayZone(R.Left, R.Top, R.Right, R.Bottom, 2000)
 
                         elif self.BrowserMode:
                             text = ui.navigateBrowserMenu(event.data2, self.ShiftHeld)
