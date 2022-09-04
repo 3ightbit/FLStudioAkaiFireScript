@@ -23,6 +23,8 @@ This is just for fun project - use at your own risk!!!
 ```
 - Text on the display indicates the current grid size when changing sizes
 - It can work with any grid size, but keeping 16, 8 and 4 for now
+- Change grid size with pressing the Select/JogWheel knob and rotate it
+- Mute track by pressing Alt+Pad on any clip of that track
 
 ### Todo/Ideas/Issues:
 

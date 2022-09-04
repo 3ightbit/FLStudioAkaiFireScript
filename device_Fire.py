@@ -1682,7 +1682,12 @@ class TFire():
                                                 elif self.ShiftHeld:
                                                     m = m | TLC_TriggerCheckColumnMode # same mode trigger
 
-                                            playlist.triggerLiveClip(y2, x2, m) # no velocity
+                                            if self.AltHeld:
+                                                playlist.triggerLiveClip(y2, -1, TLC_MuteOthers | TLC_Fill)
+                                            else:
+                                                playlist.triggerLiveClip(y2, x2, m) # no velocity
+                                            
+
                                             self.BtnLastClip[event.data1].TrackNum = y2
                                             self.BtnLastClip[event.data1].SubNum = x2
                                             Flags = m
