@@ -1589,11 +1589,12 @@ class TFire():
                                       self.PlayingChannels.remove(event.data1)
 
                                 if utils.InterNoSwap(event.data1, 0, channels.channelCount() - 1):
-                                    if not self.AltHeld:
+                                    if self.AltHeld:
                                         channels.midiNoteOn(event.data1, DotNote_Default, m, 0)
                                     else:
                                         self.CutPlayingNotes()
                                         channels.selectOneChannel(event.data1)
+                                        channels.midiNoteOn(event.data1, DotNote_Default, m, 0)
                                         self.DisplayTimedText('Chan: ' + channels.getChannelName(event.data1))
 
                         elif self.CurrentMode == ModeNotes: # keyboard mode
